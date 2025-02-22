@@ -1,66 +1,274 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Book Review System - REST API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a REST API for managing books, authors, and tags, built with Laravel and secured using Laravel Sanctum.
 
-## About Laravel
+## Project Setup
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Follow these steps to set up the project locally.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+1. Clone the repository:
 
-## Learning Laravel
+git clone https://github.com/your-username/book-review-system.git
+cd book-review-system
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+2. Install PHP dependencies:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+composer install
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Copy the environment file:
 
-## Laravel Sponsors
+cp .env.example .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+4. Generate APP_KEY:
 
-### Premium Partners
+php artisan key:generate
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+5. Configure the database in .env file:
 
-## Contributing
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=book_review_db
+DB_USERNAME=root
+DB_PASSWORD=
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+6. Run database migrations and seed sample data:
 
-## Code of Conduct
+php artisan migrate --seed
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+7. Install Laravel Sanctum:
 
-## Security Vulnerabilities
+php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
+php artisan migrate
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+8. Start the development server:
 
-## License
+php artisan serve
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Authentication (Laravel Sanctum)
+
+All protected routes require Bearer Token Authentication.
+
+- Login
+
+Endpoint: POST /api/login Body:
+
+{
+    "email": "user@example.com",
+    "password": "password"
+}
+
+Response:
+
+{
+    "message": "Login successful",
+    "token": "your-generated-token",
+    "role" : "admin"
+}
+
+After logging in, use the token in the Authorization header for all protected requests:
+
+Authorization: Bearer your-generated-token
+
+- Logout
+
+Endpoint: POST /api/logout: Bearer TokenResponse:
+
+{
+    "message": "Logged out"
+}
+
+## API Documentation
+
+### Authors API 
+
+ - Get all authors 
+
+Endpoint: GET /api/authors Response:
+
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "created_at": "2025-02-22T09:00:20.000000Z",
+        "updated_at": "2025-02-22T09:00:20.000000Z"
+    },
+]
+
+- Get a single author
+
+Endpoint: GET /api/authors/{id} Response: 
+
+{
+    "id": 1,
+    "name": "John Doe",
+    "created_at": "2025-02-22T09:00:20.000000Z",
+    "updated_at": "2025-02-22T09:00:20.000000Z"
+}
+
+- Update author: 
+
+Endpoint: PUT /api/authors/{id}  Authorization: Bearer TokenRequest Body:
+
+{
+  "name": "Updated Author Name",
+}
+
+Response: 
+
+{
+    "id": 1,
+    "name": "Updated Author Name",
+    "created_at": "2025-02-22T09:00:20.000000Z",
+    "updated_at": "2025-02-22T16:53:52.000000Z"
+}
+
+- Delete author:
+
+Endpoint: DELETE /api/authors/{id} Authorization: Bearer TokenResponse:
+
+{
+    "message": "Author deleted successfully"
+}
+
+
+### Books API
+
+- Get all books
+
+Endpoint: GET /api/books Response:
+
+[
+    {
+        "id": 1,
+        "title": "Book Title",
+        "author": "Author Name"
+    }
+]
+
+- Get a single book
+
+Endpoint: GET /api/books/{id} Response:
+
+    {
+        "id": 1,
+        "title": "Example Book",
+        "publication_year": "2023",
+        "description": "A book description",
+        "author_id": 1,
+        "created_at": "2025-02-22T09:01:32.000000Z",
+        "updated_at": "2025-02-22T09:01:32.000000Z"
+    },
+
+
+- Create a new book
+
+Endpoint: POST /api/books Authorization: Bearer TokenRequest Body:
+
+{
+    "title": "Example Book",
+    "publication_year": 2023,
+    "description": "A book description",
+    "author_id": 1  
+}
+
+Response:
+
+{
+   "title": "Example Book",
+    "publication_year": 2023,
+    "description": "A book description",
+    "author_id": 1,
+    "updated_at": "2025-02-22T16:07:50.000000Z",
+    "created_at": "2025-02-22T16:07:50.000000Z",
+    "id": 3
+}
+
+- Update a book
+
+Endpoint: PUT /api/books/{id} Authorization: Bearer TokenRequest Body:
+
+{
+  "title": "Updated Book",
+  "publication_year": 2023,
+  "author_id": 1 
+}
+
+Response:
+
+{
+    "id": 1,
+    "title": "Updated Book",
+    "publication_year": 2023,
+    "description": "A book description",
+    "author_id": 1,
+    "created_at": "2025-02-22T09:01:32.000000Z",
+    "updated_at": "2025-02-22T16:15:45.000000Z"
+}
+
+- Delete a book
+
+Endpoint: DELETE /api/books/{id} Authorization: Bearer TokenResponse:
+
+{
+    "message": "Book deleted successfully"
+}
+
+### Tags API
+
+- Get all tags
+
+Endpoint: GET /api/tags Response:
+
+[
+   {
+        "id": 1,
+        "name": "Fiction",
+        "created_at": "2025-02-22T09:02:47.000000Z",
+        "updated_at": "2025-02-22T09:02:47.000000Z"
+    }
+]
+
+- Attach a tag to a book
+
+Endpoint: POST /api/books/{book_id}/tags Authorization: Bearer TokenRequest Body:
+
+{
+    "tags": [1, 2]
+}
+
+Response:
+
+{
+    "message": "Tags attached successfully"
+}
+
+- Detach a tag from a book
+
+Endpoint: DELETE /api/books/{book_id}/tags/{tag_id} Authorization: Bearer TokenResponse:
+
+{
+    "message": "Tag detached successfully"
+}
+
+## Middleware & Role-Based Access
+
+Sanctum Authentication (auth:sanctum) is required for most routes.
+
+Admin Middleware (admin) is required for managing books, authors, and tags.
+
+Only admin users can create, update, or delete books, authors, and tags.
+
+## Technologies Used
+
+PHP 8.x
+
+Laravel 10.x
+
+MySQL
+
+Laravel Sanctum (API authentication)
+
+Eloquent ORM
