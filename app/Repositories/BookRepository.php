@@ -13,7 +13,7 @@ class BookRepository extends BaseRepository
 
     public function attachTags(Book $book, array $tagIds) : Book
     {
-        $book->tags()->sync($tagIds);
+        $book->tags()->attach($tagIds);
         return $book->load('tags');
     }
 
@@ -22,7 +22,7 @@ class BookRepository extends BaseRepository
         $book->tags()->detach($tagId);
     }
 
-    public function getBooksWithTags(Book $book)
+    public function getBooksWithTags(Book $book) : Book
     {
         return $book->load('tags');
     }

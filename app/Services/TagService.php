@@ -3,38 +3,68 @@ namespace App\Services;
 
 use App\Repositories\Interfaces\TagRepositoryInterface;
 use App\Models\Tag;
+use Illuminate\Database\Eloquent\Collection;
 
+/**
+ *
+ */
 class TagService
 {
-    protected $tagRepository;
+    /**
+     * @var TagRepositoryInterface
+     */
+    protected TagRepositoryInterface $tagRepository;
 
+    /**
+     * @param TagRepositoryInterface $tagRepository
+     */
     public function __construct(TagRepositoryInterface $tagRepository)
     {
         $this->tagRepository = $tagRepository;
     }
 
-    public function getTagById($id)
+    /**
+     * @param $id
+     * @return Tag
+     */
+    public function getTagById($id) : Tag
     {
         return $this->tagRepository->findById($id);
     }
 
-    public function getAllTags()
+    /**
+     * @return Collection
+     */
+    public function getAllTags() : Collection
     {
         return $this->tagRepository->all();
     }
 
-    public function createTag(array $data)
+    /**
+     * @param array $data
+     * @return Tag
+     */
+    public function createTag(array $data) : Tag
     {
         return $this->tagRepository->create($data);
     }
 
-    public function updateTag(Tag $tag, array $data)
+    /**
+     * @param Tag $tag
+     * @param array $data
+     * @return Tag
+     */
+    public function updateTag(Tag $tag, array $data) : Tag
     {
         return $this->tagRepository->update($tag, $data);
     }
 
-    public function deleteTag(Tag $tag)
+    /**
+     * @param Tag $tag
+     * @return void
+     */
+    public function deleteTag(Tag $tag) : void
     {
-        return $this->tagRepository->delete($tag);
+         $this->tagRepository->delete($tag);
     }
 }
