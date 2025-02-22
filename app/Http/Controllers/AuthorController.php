@@ -23,6 +23,8 @@ class AuthorController extends Controller
 
     public function store(AuthorRequest $request)
     {
+        $this->authorize('create', Author::class);
+
         $author = $this->authorService->createAuthor($request->validated());
         return response()->json($author, 201);
     }
@@ -35,7 +37,10 @@ class AuthorController extends Controller
 
     public function update(AuthorRequest $request, Author $author)
     {
+        $this->authorize('update', $author);
+        
         $updatedAuthor = $this->authorService->updateAuthor($author->id, $request->validated());
+    
         return response()->json($updatedAuthor);
     }
 

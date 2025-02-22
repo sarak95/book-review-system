@@ -30,19 +30,26 @@ class TagController extends Controller
     }
 
     public function store(TagRequest $request)
-    { 
+    {
+        $this->authorize('create', Tag::class); 
+
         $tag = $this->tagService->createTag($request->validated());
         return response()->json($tag, 201);
     }
 
     public function update(TagRequest $request, Tag $tag)
     {
+        $this->authorize('update', $tag); 
+
         $updatedTag = $this->tagService->updateTag($tag, $request->validated());
         return response()->json($updatedTag);
     }
 
+
     public function destroy(Tag $tag)
     {
+        $this->authorize('delete', $tag);
+
         $this->tagService->deleteTag($tag);
         return response()->json(['message' => 'Tag deleted successfully']);
     }

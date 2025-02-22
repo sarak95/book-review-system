@@ -26,24 +26,31 @@ class BookController extends Controller
 
     public function store(BookRequest $request): JsonResponse
     {
+        $this->authorize('create', Book::class);
+
         $book = $this->bookService->createBook($request->validated());
         return response()->json($book, 201);
     }
 
     public function update(BookRequest $request, Book $book): JsonResponse
     {
+      $this->authorize('update', $book);
+
        $book = $this->bookService->updateBook($book->id, $request->validated());
        return response()->json($book);
     }
 
     public function destroy(Book $book): JsonResponse
     {
+        $this->authorize('delete', $book);
+    
         $this->bookService->deleteBook($book->id);
         return response()->json(['message' => 'Book deleted successfully']);
     }
 
     public function attachTags(Request $request, Book $book): JsonResponse
     {
+        $this->authorize('attachTags', $book);
 
         $validated = $request->validate([
             'tags' => 'required|array',
@@ -57,6 +64,7 @@ class BookController extends Controller
 
     public function detachTag(Book $book, $tagId): JsonResponse
     {
+        $this->authorize('detachTags', $book);
 
         $this->bookService->detachTagFromBook($book, $tagId);
 
