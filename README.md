@@ -10,136 +10,186 @@ Follow these steps to set up the project locally.
 
 1. Clone the repository:
 
+```sh
 git clone https://github.com/your-username/book-review-system.git
 cd book-review-system
+```
 
 2. Install PHP dependencies:
 
+```sh
 composer install
+```
 
 3. Copy the environment file:
 
+```sh
 cp .env.example .env
+```
 
 4. Generate APP_KEY:
 
+```sh
 php artisan key:generate
+```
 
-5. Configure the database in .env file:
+5. Configure the database in `.env` file:
 
+```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
 DB_DATABASE=book_review_db
 DB_USERNAME=root
 DB_PASSWORD=
+```
 
 6. Run database migrations and seed sample data:
 
+```sh
 php artisan migrate --seed
+```
 
 7. Install Laravel Sanctum:
 
+```sh
 php artisan vendor:publish --provider="Laravel\Sanctum\SanctumServiceProvider"
 php artisan migrate
+```
 
 8. Start the development server:
 
+```sh
 php artisan serve
+```
 
 ## Authentication (Laravel Sanctum)
 
 All protected routes require Bearer Token Authentication.
 
-- Login
+### Login
 
-Endpoint: POST /api/login Body:
+**Endpoint:** `POST /api/login`  
+**Body:**
 
+```json
 {
     "email": "user@example.com",
     "password": "password"
 }
+```
 
-Response:
+**Response:**
 
+```json
 {
     "message": "Login successful",
     "token": "your-generated-token",
-    "role" : "admin"
+    "role": "admin"
 }
+```
 
 After logging in, use the token in the Authorization header for all protected requests:
 
+```
 Authorization: Bearer your-generated-token
+```
 
-- Logout
+### Logout
 
-Endpoint: POST /api/logout: Bearer TokenResponse:
+**Endpoint:** `POST /api/logout`  
+**Authorization:** Bearer Token  
 
+**Response:**
+
+```json
 {
     "message": "Logged out"
 }
+```
 
 ## API Documentation
 
-### Authors API 
+### Authors API
 
- - Get all authors 
+#### Get all authors
 
-Endpoint: GET /api/authors Response:
+**Endpoint:** `GET /api/authors`
 
+**Response:**
+
+```json
 [
     {
         "id": 1,
         "name": "John Doe",
         "created_at": "2025-02-22T09:00:20.000000Z",
         "updated_at": "2025-02-22T09:00:20.000000Z"
-    },
+    }
 ]
+```
 
-- Get a single author
+#### Get a single author
 
-Endpoint: GET /api/authors/{id} Response: 
+**Endpoint:** `GET /api/authors/{id}`
 
+**Response:**
+
+```json
 {
     "id": 1,
     "name": "John Doe",
     "created_at": "2025-02-22T09:00:20.000000Z",
     "updated_at": "2025-02-22T09:00:20.000000Z"
 }
+```
 
-- Update author: 
+#### Update an author
 
-Endpoint: PUT /api/authors/{id}  Authorization: Bearer TokenRequest Body:
+**Endpoint:** `PUT /api/authors/{id}`  
+**Authorization:** Bearer Token  
 
+**Request Body:**
+
+```json
 {
-  "name": "Updated Author Name",
+    "name": "Updated Author Name"
 }
+```
 
-Response: 
+**Response:**
 
+```json
 {
     "id": 1,
     "name": "Updated Author Name",
     "created_at": "2025-02-22T09:00:20.000000Z",
     "updated_at": "2025-02-22T16:53:52.000000Z"
 }
+```
 
-- Delete author:
+#### Delete an author
 
-Endpoint: DELETE /api/authors/{id} Authorization: Bearer TokenResponse:
+**Endpoint:** `DELETE /api/authors/{id}`  
+**Authorization:** Bearer Token  
 
+**Response:**
+
+```json
 {
     "message": "Author deleted successfully"
 }
-
+```
 
 ### Books API
 
-- Get all books
+#### Get all books
 
-Endpoint: GET /api/books Response:
+**Endpoint:** `GET /api/books`
 
+**Response:**
+
+```json
 [
     {
         "id": 1,
@@ -147,57 +197,74 @@ Endpoint: GET /api/books Response:
         "author": "Author Name"
     }
 ]
+```
 
-- Get a single book
+#### Get a single book
 
-Endpoint: GET /api/books/{id} Response:
+**Endpoint:** `GET /api/books/{id}`
 
-    {
-        "id": 1,
-        "title": "Example Book",
-        "publication_year": "2023",
-        "description": "A book description",
-        "author_id": 1,
-        "created_at": "2025-02-22T09:01:32.000000Z",
-        "updated_at": "2025-02-22T09:01:32.000000Z"
-    },
+**Response:**
 
+```json
+{
+    "id": 1,
+    "title": "Example Book",
+    "publication_year": "2023",
+    "description": "A book description",
+    "author_id": 1,
+    "created_at": "2025-02-22T09:01:32.000000Z",
+    "updated_at": "2025-02-22T09:01:32.000000Z"
+}
+```
 
-- Create a new book
+#### Create a new book
 
-Endpoint: POST /api/books Authorization: Bearer TokenRequest Body:
+**Endpoint:** `POST /api/books`  
+**Authorization:** Bearer Token  
 
+**Request Body:**
+
+```json
 {
     "title": "Example Book",
     "publication_year": 2023,
     "description": "A book description",
-    "author_id": 1  
+    "author_id": 1
 }
+```
 
-Response:
+**Response:**
 
+```json
 {
-   "title": "Example Book",
+    "id": 3,
+    "title": "Example Book",
     "publication_year": 2023,
     "description": "A book description",
     "author_id": 1,
-    "updated_at": "2025-02-22T16:07:50.000000Z",
     "created_at": "2025-02-22T16:07:50.000000Z",
-    "id": 3
+    "updated_at": "2025-02-22T16:07:50.000000Z"
 }
+```
 
-- Update a book
+#### Update a book
 
-Endpoint: PUT /api/books/{id} Authorization: Bearer TokenRequest Body:
+**Endpoint:** `PUT /api/books/{id}`  
+**Authorization:** Bearer Token  
 
+**Request Body:**
+
+```json
 {
-  "title": "Updated Book",
-  "publication_year": 2023,
-  "author_id": 1 
+    "title": "Updated Book",
+    "publication_year": 2023,
+    "author_id": 1
 }
+```
 
-Response:
+**Response:**
 
+```json
 {
     "id": 1,
     "title": "Updated Book",
@@ -207,68 +274,85 @@ Response:
     "created_at": "2025-02-22T09:01:32.000000Z",
     "updated_at": "2025-02-22T16:15:45.000000Z"
 }
+```
 
-- Delete a book
+#### Delete a book
 
-Endpoint: DELETE /api/books/{id} Authorization: Bearer TokenResponse:
+**Endpoint:** `DELETE /api/books/{id}`  
+**Authorization:** Bearer Token  
 
+**Response:**
+
+```json
 {
     "message": "Book deleted successfully"
 }
+```
 
 ### Tags API
 
-- Get all tags
+#### Get all tags
 
-Endpoint: GET /api/tags Response:
+**Endpoint:** `GET /api/tags`
 
+**Response:**
+
+```json
 [
-   {
+    {
         "id": 1,
         "name": "Fiction",
         "created_at": "2025-02-22T09:02:47.000000Z",
         "updated_at": "2025-02-22T09:02:47.000000Z"
     }
 ]
+```
 
-- Attach a tag to a book
+#### Attach a tag to a book
 
-Endpoint: POST /api/books/{book_id}/tags Authorization: Bearer TokenRequest Body:
+**Endpoint:** `POST /api/books/{book_id}/tags`  
+**Authorization:** Bearer Token  
 
+**Request Body:**
+
+```json
 {
     "tags": [1, 2]
 }
+```
 
-Response:
+**Response:**
 
+```json
 {
     "message": "Tags attached successfully"
 }
+```
 
-- Detach a tag from a book
+#### Detach a tag from a book
 
-Endpoint: DELETE /api/books/{book_id}/tags/{tag_id} Authorization: Bearer TokenResponse:
+**Endpoint:** `DELETE /api/books/{book_id}/tags/{tag_id}`  
+**Authorization:** Bearer Token  
 
+**Response:**
+
+```json
 {
     "message": "Tag detached successfully"
 }
+```
 
 ## Middleware & Role-Based Access
 
-Sanctum Authentication (auth:sanctum) is required for most routes.
-
-Admin Middleware (admin) is required for managing books, authors, and tags.
-
-Only admin users can create, update, or delete books, authors, and tags.
+- Sanctum Authentication (`auth:sanctum`) is required for most routes.
+- Admin Middleware (`admin`) is required for managing books, authors, and tags.
+- Only admin users can create, update, or delete books, authors, and tags.
 
 ## Technologies Used
 
-PHP 8.x
+- PHP 8.x
+- Laravel 10.x
+- MySQL
+- Laravel Sanctum (API authentication)
+- Eloquent ORM
 
-Laravel 10.x
-
-MySQL
-
-Laravel Sanctum (API authentication)
-
-Eloquent ORM
