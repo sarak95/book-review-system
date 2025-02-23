@@ -122,9 +122,7 @@ Authorization: Bearer your-generated-token
 [
     {
         "id": 1,
-        "name": "John Doe",
-        "created_at": "2025-02-22T09:00:20.000000Z",
-        "updated_at": "2025-02-22T09:00:20.000000Z"
+        "name": "John Doe"
     }
 ]
 ```
@@ -138,9 +136,7 @@ Authorization: Bearer your-generated-token
 ```json
 {
     "id": 1,
-    "name": "John Doe",
-    "created_at": "2025-02-22T09:00:20.000000Z",
-    "updated_at": "2025-02-22T09:00:20.000000Z"
+    "name": "John Doe"
 }
 ```
 
@@ -162,9 +158,7 @@ Authorization: Bearer your-generated-token
 ```json
 {
     "id": 1,
-    "name": "Updated Author Name",
-    "created_at": "2025-02-22T09:00:20.000000Z",
-    "updated_at": "2025-02-22T16:53:52.000000Z"
+    "name": "Updated Author Name"
 }
 ```
 
@@ -192,9 +186,15 @@ Authorization: Bearer your-generated-token
 ```json
 [
     {
-        "id": 1,
-        "title": "Book Title",
-        "author": "Author Name"
+        "id": 7,
+        "title": "Example Book",
+        "publication_year": "2023",
+        "author": {
+            "id": 2,
+            "name": "John Doe"
+        },
+        "tags": [],
+        "created_at": "2025-02-22 17:11:28"
     }
 ]
 ```
@@ -207,13 +207,15 @@ Authorization: Bearer your-generated-token
 
 ```json
 {
-    "id": 1,
+    "id": 7,
     "title": "Example Book",
     "publication_year": "2023",
-    "description": "A book description",
-    "author_id": 1,
-    "created_at": "2025-02-22T09:01:32.000000Z",
-    "updated_at": "2025-02-22T09:01:32.000000Z"
+    "author": {
+        "id": 2,
+        "name": "John Doe"
+    },
+    "tags": [],
+    "created_at": "2025-02-22 17:11:28"
 }
 ```
 
@@ -237,13 +239,15 @@ Authorization: Bearer your-generated-token
 
 ```json
 {
-    "id": 3,
+    "id": 8,
     "title": "Example Book",
     "publication_year": 2023,
-    "description": "A book description",
-    "author_id": 1,
-    "created_at": "2025-02-22T16:07:50.000000Z",
-    "updated_at": "2025-02-22T16:07:50.000000Z"
+    "author": {
+        "id": 2,
+        "name": "John Doe"
+    },
+    "tags": [],
+    "created_at": "2025-02-23 08:17:15"
 }
 ```
 
@@ -266,13 +270,15 @@ Authorization: Bearer your-generated-token
 
 ```json
 {
-    "id": 1,
+    "id": 7,
     "title": "Updated Book",
     "publication_year": 2023,
-    "description": "A book description",
-    "author_id": 1,
-    "created_at": "2025-02-22T09:01:32.000000Z",
-    "updated_at": "2025-02-22T16:15:45.000000Z"
+    "author": {
+        "id": 1,
+        "name": "John Doe"
+    },
+    "tags": [],
+    "created_at": "2025-02-22 17:11:28"
 }
 ```
 
@@ -302,8 +308,6 @@ Authorization: Bearer your-generated-token
     {
         "id": 1,
         "name": "Fiction",
-        "created_at": "2025-02-22T09:02:47.000000Z",
-        "updated_at": "2025-02-22T09:02:47.000000Z"
     }
 ]
 ```
