@@ -30,6 +30,7 @@ class BookController extends Controller
 
     /**
      * Get all books.
+     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -38,6 +39,8 @@ class BookController extends Controller
 
     /**
      * Store a new book.
+     * @param BookRequest $request
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function store(BookRequest $request): JsonResponse
@@ -50,6 +53,9 @@ class BookController extends Controller
 
     /**
      * Update an existing book.
+     * @param BookRequest $request
+     * @param Book $book
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function update(BookRequest $request, Book $book): JsonResponse
@@ -62,6 +68,8 @@ class BookController extends Controller
 
     /**
      * Delete a book.
+     * @param Book $book
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function destroy(Book $book): JsonResponse
@@ -74,6 +82,9 @@ class BookController extends Controller
 
     /**
      * Attach tags to a book.
+     * @param Request $request
+     * @param Book $book
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function attachTags(Request $request, Book $book): JsonResponse
@@ -91,6 +102,9 @@ class BookController extends Controller
 
     /**
      * Detach a tag from a book.
+     * @param Book $book
+     * @param $tagId
+     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function detachTag(Book $book, $tagId): JsonResponse
@@ -103,6 +117,8 @@ class BookController extends Controller
 
     /**
      * Show details of a book.
+     * @param Book $book
+     * @return JsonResponse
      */
     public function show(Book $book): JsonResponse
     {
@@ -111,6 +127,8 @@ class BookController extends Controller
 
     /**
      * Show a book with its tags.
+     * @param Book $book
+     * @return JsonResponse
      */
     public function showWithTags(Book $book): JsonResponse
     {
