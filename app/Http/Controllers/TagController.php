@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\TagRequest;
-use App\Services\TagService;
+use App\Http\Resources\TagResource;
 use App\Models\Tag;
+use App\Services\TagService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,24 +28,22 @@ class TagController extends Controller
         $this->tagService = $tagService;
     }
 
-
     /**
      * @return JsonResponse
      */
     public function index(): JsonResponse
     {
         $tags = $this->tagService->getAllTags();
-        return response()->json($tags);
+        return response()->json(TagResource::collection($tags));
     }
 
     /**
-     * @param $tagId
+     * @param Tag $tag
      * @return JsonResponse
      */
-    public function show($tagId): JsonResponse
+    public function show(Tag $tag): JsonResponse
     {
-        $tag = $this->tagService->getTagById($tagId);
-        return response()->json($tag);
+        return response()->json(new TagResource($tag));
     }
 
     /**
@@ -57,7 +56,7 @@ class TagController extends Controller
         $this->authorize('create', Tag::class);
 
         $tag = $this->tagService->createTag($request->validated());
-        return response()->json($tag, 201);
+        return response()->json(new TagResource($tag), 201);
     }
 
     /**
@@ -71,13 +70,10 @@ class TagController extends Controller
         $this->authorize('update', $tag);
 
         $updatedTag = $this->tagService->updateTag($tag, $request->validated());
-        return response()->json($updatedTag);
+        return response()->json(new TagResource($updatedTag));
     }
 
-
     /**
-     * @param Tag $tag
-     * @return JsonResponse
      * @throws AuthorizationException
      */
     public function destroy(Tag $tag): JsonResponse

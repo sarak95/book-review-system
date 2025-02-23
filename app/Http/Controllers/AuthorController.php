@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\AuthorRequest;
+use App\Http\Resources\AuthorResource;
 use App\Models\Author;
 use App\Services\AuthorService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\ResourceCollection;
 
 /**
  * Class AuthorController
@@ -27,12 +29,12 @@ class AuthorController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * @return ResourceCollection
      */
-    public function index(): JsonResponse
+    public function index(): ResourceCollection
     {
         $authors = $this->authorService->getAllAuthors();
-        return response()->json($authors);
+        return AuthorResource::collection($authors);
     }
 
     /**
@@ -45,17 +47,17 @@ class AuthorController extends Controller
         $this->authorize('create', Author::class);
 
         $author = $this->authorService->createAuthor($request->validated());
-        return response()->json($author, 201);
+        return response()->json(new AuthorResource($author), 201);
     }
 
     /**
      * @param $authorId
-     * @return JsonResponse
+     * @return AuthorResource
      */
-    public function show($authorId): JsonResponse
+    public function show($authorId): AuthorResource
     {
         $author = $this->authorService->getAuthorById($authorId);
-        return response()->json($author);
+        return new AuthorResource($author);
     }
 
     /**
@@ -69,8 +71,7 @@ class AuthorController extends Controller
         $this->authorize('update', $author);
 
         $updatedAuthor = $this->authorService->updateAuthor($author->id, $request->validated());
-
-        return response()->json($updatedAuthor);
+        return response()->json(new AuthorResource($updatedAuthor));
     }
 
     /**
@@ -83,4 +84,3 @@ class AuthorController extends Controller
         return response()->json(['message' => 'Author deleted successfully']);
     }
 }
-

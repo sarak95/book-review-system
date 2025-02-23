@@ -3,12 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\BookRequest;
+use App\Http\Resources\BookResource;
 use App\Models\Book;
 use App\Services\BookService;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 /**
  * Class BookController
@@ -29,17 +29,15 @@ class BookController extends Controller
     }
 
     /**
-     * @return JsonResponse
+     * Get all books.
      */
     public function index(): JsonResponse
     {
-
-        return response()->json($this->bookService->getAllBooks());
+        return response()->json(BookResource::collection($this->bookService->getAllBooks()));
     }
 
     /**
-     * @param BookRequest $request
-     * @return JsonResponse
+     * Store a new book.
      * @throws AuthorizationException
      */
     public function store(BookRequest $request): JsonResponse
@@ -47,26 +45,23 @@ class BookController extends Controller
         $this->authorize('create', Book::class);
 
         $book = $this->bookService->createBook($request->validated());
-        return response()->json($book, 201);
+        return response()->json(new BookResource($book), 201);
     }
 
     /**
-     * @param BookRequest $request
-     * @param Book $book
-     * @return JsonResponse
+     * Update an existing book.
      * @throws AuthorizationException
      */
     public function update(BookRequest $request, Book $book): JsonResponse
     {
-      $this->authorize('update', $book);
+        $this->authorize('update', $book);
 
-       $book = $this->bookService->updateBook($book->id, $request->validated());
-       return response()->json($book);
+        $book = $this->bookService->updateBook($book->id, $request->validated());
+        return response()->json(new BookResource($book));
     }
 
     /**
-     * @param Book $book
-     * @return JsonResponse
+     * Delete a book.
      * @throws AuthorizationException
      */
     public function destroy(Book $book): JsonResponse
@@ -78,9 +73,7 @@ class BookController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param Book $book
-     * @return JsonResponse
+     * Attach tags to a book.
      * @throws AuthorizationException
      */
     public function attachTags(Request $request, Book $book): JsonResponse
@@ -93,14 +86,11 @@ class BookController extends Controller
         ]);
 
         $this->bookService->attachTagsToBook($book, $validated['tags']);
-
         return response()->json(['message' => 'Tags attached successfully']);
     }
 
     /**
-     * @param Book $book
-     * @param $tagId
-     * @return JsonResponse
+     * Detach a tag from a book.
      * @throws AuthorizationException
      */
     public function detachTag(Book $book, $tagId): JsonResponse
@@ -108,29 +98,22 @@ class BookController extends Controller
         $this->authorize('detachTags', $book);
 
         $this->bookService->detachTagFromBook($book, $tagId);
-
         return response()->json(['message' => 'Tag detached successfully']);
     }
 
     /**
-     * @param Book $book
-     * @return JsonResponse
+     * Show details of a book.
      */
     public function show(Book $book): JsonResponse
     {
-        $book = $this->bookService->getBookById($book->id);
-
-        return response()->json($book);
+        return response()->json(new BookResource($this->bookService->getBookById($book->id)));
     }
 
     /**
-     * @param Book $book
-     * @return JsonResponse
+     * Show a book with its tags.
      */
     public function showWithTags(Book $book): JsonResponse
     {
-        $bookWithTags = $this->bookService->getBookWithTags($book);
-
-        return response()->json($bookWithTags);
+        return response()->json(new BookResource($this->bookService->getBookWithTags($book)));
     }
 }
