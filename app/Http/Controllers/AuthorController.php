@@ -51,13 +51,12 @@ class AuthorController extends Controller
     }
 
     /**
-     * @param $authorId
-     * @return AuthorResource
+     * @param Author $author
+     * @return JsonResponse
      */
-    public function show($authorId): AuthorResource
+    public function show(Author $author): JsonResponse
     {
-        $author = $this->authorService->getAuthorById($authorId);
-        return new AuthorResource($author);
+        return response()->json(new AuthorResource($this->authorService->getAuthorById($author->id)));
     }
 
     /**
@@ -78,9 +77,11 @@ class AuthorController extends Controller
      * @param $authorId
      * @return JsonResponse
      */
-    public function destroy($authorId): JsonResponse
+    public function destroy(Author $author): JsonResponse
     {
-        $this->authorService->deleteAuthor($authorId);
+        $this->authorize('delete', $author);
+
+        $this->authorService->deleteAuthor($author->id);
         return response()->json(['message' => 'Author deleted successfully']);
     }
 }
